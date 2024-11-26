@@ -4,6 +4,7 @@ const { initDB } = require('./backend/initilizing');
 const app = express();
 
 let idUser;
+const idAdmin = "LyPiw";
 const bcrypt = require('bcrypt')
 
 app.set("view engine", "ejs");
@@ -41,7 +42,11 @@ app.get("/", async (req, res)=>{
                 }else if(result){
                     console.log('Berhasil login')
                     idUser = userData.idAkses
-                    res.send({message : 'Berhasil Login'})
+                    if(userData.status == "yes"){
+                        res.send({message : 'Berhasil Login'})
+                    }else{
+                        res.send({message : 'Akun Anda di nonaktifkan'})
+                    }
                 }else{
                     res.send({message : 'Kata sandi Salah'})
                 }
@@ -54,7 +59,7 @@ app.get("/", async (req, res)=>{
     }
 })
 
-app.post("/addLevel", async (req, res)=>{
+app.post("/addLevel", authMiddleware, async (req, res)=>{
      try {
         const {nama} = req.body;
         await db.addLevel(nama, idUser, idUser)
@@ -64,10 +69,10 @@ app.post("/addLevel", async (req, res)=>{
      }
 })
 
-app.put("/updateLevel", async(req, res)=>{
+app.put("/updateLevel", authMiddleware, async(req, res)=>{
     try {
-        const {namaBaru} = req.body;
-        await db.updateLevel("LyPiw", namaBaru, idUser)
+        const {idLevel, namaBaru} = req.body;
+        await db.updateLevel(idLevel, namaBaru, idUser)
         res.send({message : 'Berhasil update'})
     } catch (e) {
         res.send({message : `${e.message}`})       
@@ -81,6 +86,34 @@ app.get("/user", authMiddleware, async (req, res)=>{
             res.send(rows)
         }else{
             res.send({message : 'Tidak Ada User'})
+        }
+    } catch (e) {
+        res.send({message : `${e.message}`})       
+    }
+})
+
+app.post("/addUser", async(req, res)=>{
+    const {nama, username, password, status} = req.body
+    try {
+        const respone = await db.addAkses(nama, username, password, status, idAdmin, idUser, idUser)
+        if(respone == 200){
+            res.send({message : 'Berhasil insert User Baru'})
+        }else{
+            res.send({message : 'Gagal Insert'})
+        }
+    } catch (e) {
+        res.send({message : `${e.message}`})       
+    }
+})
+
+app.put("/updateUser", authMiddleware, async(req, res)=>{
+    const {idAkses, nama, username, password, status, idLevel} = req.body
+    try {
+        const respone = await db.updateAkses(idAkses, nama, username, password, status, idLevel, idUser, idUser)
+        if(respone == 200){
+            res.send({message : 'Berhasil update user'})
+        }else{
+            res.send({message : 'Gagal Update'})
         }
     } catch (e) {
         res.send({message : `${e.message}`})       

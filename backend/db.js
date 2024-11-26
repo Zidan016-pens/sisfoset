@@ -51,17 +51,17 @@ const getAllLevel = async()=>{
     }
 }
 
-const  addAkses = async (nama, username, password, status, idLevel, idBuat, idUpdate )=>{
+const addAkses = async (nama, username, password, status, idLevel, idBuat, idUpdate )=>{
     const db = await koneksiDB();
     const id  = shortid.generate();
     const salt = await hash.genSalt(10);
     const newPass = await hash.hash(password, salt)
-    const sql = `INSERT INTO akses ('${id}', '${nama}', '${username}', '${newPass}', '${status}', '${idLevel}', NOW(), NOW(), '${idBuat}', '${idUpdate}')`
+    const sql = `INSERT INTO akses VALUES('${id}', '${nama}', '${username}', '${newPass}', '${status}', '${idLevel}', NOW(), NOW(), '${idBuat}', '${idUpdate}')`
     try {
         await db.execute(sql)
         return 200;
-    } catch (error) {
-        console.log(`ada Error  : ${e.messsage}`)
+    } catch (e) {
+        console.log(`ada Error  : ${e}`)
         return 400;
     }
 }
@@ -69,12 +69,11 @@ const  addAkses = async (nama, username, password, status, idLevel, idBuat, idUp
 const updateAkses = async (idAkses, nama, username, password, status, idLevel, idBuat, idUpdate) =>{
     const db = await koneksiDB();
     const sql = `UPDATE akses SET nama ='${nama}',username ='${username}', password='${password}', status ='${status}', idLevel ='${idLevel}', tglUpdate = NOW(),idBuat ='${idBuat}', idUpdate='${idUpdate}' WHERE idAkses = '${idAkses}' `
-
     try {
         await db.execute(sql)
         return 200;
     } catch (e) {
-        console.log(`ada Error  : ${e.messsage}`)
+        console.log(`ada Error  : ${e}`)
         return 400;
     }
 }
