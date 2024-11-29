@@ -120,6 +120,116 @@ app.put("/updateUser", authMiddleware, async(req, res)=>{
     }
 })
 
+app.get("/merk", authMiddleware, async(req, res)=>{
+    try {
+        const respone = await db.getAllMerk();
+        if(respone != false){
+            res.send(respone)
+        }else{
+            res.send({message : 'Belum ada data'})
+        }
+    } catch (e) {
+        res.send({message : `${e.message}`})
+    }
+})
+
+app.get("/merkId/:id", authMiddleware, async(req, res)=>{
+    const id = req.params.id
+    try {
+        const respone = await db.getMerkId(id);
+        if(respone != false){
+            res.send(respone)
+        }else{
+            res.send({message : 'Belum ada data'})
+        }
+    } catch (e) {
+        res.send({message : `${e.message}`})
+    }
+})
+
+app.post("/addMerk", authMiddleware, async(req, res)=>{
+    const {nama} = req.body
+    try {
+        const respone = await db.addMerk(nama, idUser)
+        if(respone == 200){
+            res.send({message : 'Berhasil Insert'})
+        }else{
+            res.send({message : 'Ada error pada insert'})
+        }
+    } catch (e) {
+        res.send({message : `${e.message}`})
+    }
+})
+
+app.put("/updateMerk", authMiddleware, async(req, res)=>{
+    const {nama, id} = req.body
+    try {
+        const respone = await db.updateMerk(nama, idUser, id)
+        if(respone == 200){
+            res.send({message : 'Berhasil Insert'})
+        }else{
+            res.send({message : 'Ada error pada insert'})
+        }
+    } catch (e) {
+        res.send({message : `${e.message}`})        
+    }
+})
+
+app.get("/kategori", authMiddleware, async(req, res)=>{
+    try {
+        const respone = await db.getAllKategori();
+        if(respone != false){
+            res.send(respone)
+        }else{
+            res.send({message : 'Belum ada data'})
+        }
+    } catch (e) {
+        res.send({message : `${e.message}`})
+    }
+})
+
+app.get("/kategoriId/:id", authMiddleware, async(req, res)=>{
+    const id = req.params.id
+    try {
+        const respone = await db.getKategoriId(id);
+        if(respone != false){
+            res.send(respone)
+        }else{
+            res.send({message : 'Belum ada data'})
+        }
+    } catch (e) {
+        res.send({message : `${e.message}`})
+    }
+})
+
+app.post("/addKategori", authMiddleware, async(req, res)=>{
+    const {nama} = req.body
+    try {
+        const respone = await db.addKategori(nama, idUser)
+        if(respone == 200){
+            res.send({message : 'Berhasil Insert'})
+        }else{
+            res.send({message : 'Ada error pada insert'})
+        }
+    } catch (e) {
+        res.send({message : `${e.message}`})
+    }
+})
+
+app.put("/updateKategori", authMiddleware, async(req, res)=>{
+    const {nama, id} = req.body
+    try {
+        const respone = await db.updateKategori(id, nama, idUser)
+        if(respone == 200){
+            res.send({message : 'Berhasil Update'})
+        }else{
+            res.send({message : 'Ada error pada Update'})
+        }
+    } catch (e) {
+        res.send({message : `${e.message}`})        
+    }
+})
+
 app.listen(3333, () => {
     console.log("Web running : " + 3333);
 })

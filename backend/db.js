@@ -102,4 +102,103 @@ const getAllAkses = async () =>{
     }
 }
 
-module.exports = {koneksiDB, addLevel, updateLevel, getAllLevel, addAkses, updateAkses, getAksesByNama, getAllAkses}
+const getAllKategori = async()=>{
+    const db = await koneksiDB();
+    const sql = `SELECT * FROM kategori`
+    try {
+        const [rows] = await db.execute(sql)
+        return rows.length> 0 ? rows : false
+    } catch (e) {
+        console.log(`ada Error  : ${e.messsage}`)
+        return 400;
+    }
+}
+
+const getKategoriId = async (id)=>{
+    const db = await koneksiDB();
+    const sql = `SELECT * FROM kategori WHERE idKategori = '${id}';`
+    try {
+        const [rows] = await db.execute(sql)
+        return rows.length > 0 ? rows : false
+    } catch (e) {
+        console.log(`ada Error  : ${e}`)
+        return 400;
+    }
+}
+
+const addKategori = async(nama, idUser)=>{
+    const db = await koneksiDB();
+    const id = shortid.generate();
+    const sql = `INSERT INTO kategori VALUES('${id}', '${nama}', NOW(), NOW(), '${idUser}', '${idUser}')`
+    try {
+        await db.execute(sql)
+        return 200;
+    } catch (e) {
+        console.log(`ada Error  : ${e}`)
+        return 400;
+    }
+}
+
+const updateKategori = async (id, nama, idUser)=>{
+    const db = await koneksiDB();
+    const sql = `UPDATE kategori set nama = '${nama}', idUpdate = '${idUser}', tglUpdate = NOW() where idKategori = '${id}'`
+    try {
+        await db.execute(sql)
+        return 200;
+    } catch (e) {
+        console.log(`ada Error  : ${e}`)
+        return 400;
+    }
+}
+
+const getAllMerk = async ()=>{
+    const db = await koneksiDB();
+    const sql = `SELECT * FROM merk`
+    try {
+        const [rows] = await db.execute(sql)
+        return rows.length > 0 ? rows : false
+    } catch (e) {
+        console.log(`ada Error  : ${e}`)
+        return 400;
+    }
+}
+
+const getMerkId = async(id)=>{
+    const db = await koneksiDB();
+    const sql = `SELECT * FORM merk where idMerk = '${id}'`
+    try {
+        const [rows] = await db.execute(sql)
+        return rows.length > 0 ? rows : false
+    } catch (e) {
+        console.log(`ada Error  : ${e}`)
+        return 400;
+    }
+}
+
+const addMerk = async (nama, idUser)=>{
+    const db = await koneksiDB();
+    const id = shortid.generate();
+    const sql = `INSERT INTO merk VALUES('${id}','${nama}', NOW(), NOW(), '${idUser}', '${idUser}')`
+    try {
+        await db.execute(sql);
+        return 200;
+    } catch (e) {
+        console.log(`ada Error  : ${e}`)
+        return 400;
+    }
+}
+
+const updateMerk = async (nama, idUser, id) =>{
+    const db = await koneksiDB();
+    const sql = `UPDATE merk SET nama = '${nama}', idUpdate = '${idUser}', tglUpdate = NOW() where idMerk = '${id}'`
+    try {
+        await db.execute(sql)
+        return 200;
+    } catch (e) {
+        console.log(`ada Error  : ${e}`)
+        return 400;
+    }
+}
+
+
+module.exports = {koneksiDB, addLevel, updateLevel, getAllLevel, addAkses, updateAkses, getAksesByNama, getAllAkses, getAllKategori, getKategoriId, addKategori, updateKategori, getAllMerk, getMerkId, addMerk, updateMerk}
