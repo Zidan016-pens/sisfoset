@@ -13,15 +13,6 @@ app.use(express.static(__dirname + '/public'));
 app.use(express.json())
 app.use(express.urlencoded({extended: true}));
 
-// app.get("/", async (req, res)=>{
-//     try {
-//         const [rows] = await db.getAllLevel();
-//         res.send(rows)
-//     } catch (e) {
-//         res.send({message : 'Error'})
-//     }
-// })
-
 const authMiddleware = (req, res, next) => {
     if (!idUser) {
         return res.status(401).send("Anda Harus Login Terlebih Dahulu");
@@ -43,7 +34,7 @@ app.get("/", async (req, res)=>{
                     console.log('Berhasil login')
                     idUser = userData.idAkses
                     if(userData.status == "yes"){
-                        res.send({message : 'Berhasil Login'})
+                        res.render("index", {namafile : "dashboard"})
                     }else{
                         res.send({message : 'Akun Anda di nonaktifkan'})
                     }
@@ -57,6 +48,11 @@ app.get("/", async (req, res)=>{
     } catch (error) {
         res.send({message : 'Error'})
     }
+})
+
+app.get("/dataMaster", authMiddleware, async (req, res)=>{
+    const mAset = await db.getAllMasset();
+    res.render("index", {namafile: "dataMaster", data: mAset})
 })
 
 app.post("/addLevel", authMiddleware, async (req, res)=>{
