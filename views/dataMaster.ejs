@@ -60,33 +60,46 @@
                         </ul>
                     </div>
                 </nav>
+                <!-- navbar top start -->
                 <div class="px-3">
+                    <!-- header main start -->
                     <div class="container mt-3">
                         <p class="h2">Data Master</p>
                     </div>
+                    <!-- header main end -->
 
-<div class="table-responsive">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Kode</th>
-                <th>tipe</th>
-                <th>Spesifikasi</th>
-                <th>Deskripsi</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% data.forEach((item) => { %>
-                <tr>
-                    <td><%= item.kode %></td>
-                    <td><%= item.tipe %></td>
-                    <td><%= item.spesifikasi %></td>
-                    <td><%= item.deskripsi %></td>
-                </tr>
-            <% }) %>
-        </tbody>
-    </table>
-</div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Kode</th>
+                                    <th>Tipe</th>
+                                    <th>Spesifikasi</th>
+                                    <th>Deskripsi</th>
+                                    <th>Actions</th> <!-- Added a header for the actions column -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% data.forEach((item) => { %>
+                                    <tr>
+                                        <td><%= item.kode %></td>
+                                        <td><%= item.tipe %></td>
+                                        <td><%= item.spesifikasi %></td>
+                                        <td><%= item.deskripsi %></td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#exampleModal2">
+                                                Edit
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-danger">
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                    
                     <!-- main content end-->
                 </div>
             </div>

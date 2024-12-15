@@ -92,7 +92,7 @@ const updateAkses = async (idAkses, nama, username, password, status, idLevel, i
 
 const getAksesByNama = async (nama)=>{
     const db = await koneksiDB();
-    const sql =  `SELECT * FROM akses WHERE nama = '${nama}'`
+    const sql =  `SELECT * FROM akses WHERE username = '${nama}'`
     try {
         const [rows] = await db.execute(sql)
         return rows.length > 0 ? rows : false  
@@ -192,10 +192,10 @@ const getAllMerk = async ()=>{
     const sql = `SELECT * FROM merk`
     try {
         const [rows] = await db.execute(sql)
-        return rows.length > 0 ? rows : false
+        return rows.length > 0 ? rows : []
     } catch (e) {
         console.log(`ada Error  : ${e}`)
-        return 400;
+        return [];
     }
 }
 
