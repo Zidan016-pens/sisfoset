@@ -24,10 +24,10 @@
                 </nav>
 
                 <nav class="nav flex-column">
-                    <a class="nav-link text-white" style="white-space: nowrap;" href="dashboard.html">
+                    <a class="nav-link text-white" style="white-space: nowrap;" href="/dashboard">
                         <i class="bi bi-speedometer2 pr-2"></i><span class="d-none d-sm-inline ms-2">Dashboard</span>
                     </a>
-                    <a class="nav-link text-white" style="white-space: nowrap;" href="dataMaster.html">
+                    <a class="nav-link text-white" style="white-space: nowrap;" href="/dataMaster">
                         <i class="bi bi-collection pr-2"></i><span class="d-none d-sm-inline ms-2">Data Master</span>
                     </a>
                     <a class="nav-link text-white" style="white-space: nowrap;" href="/kategori">
@@ -36,20 +36,23 @@
                     <a class="nav-link text-white" style="white-space: nowrap;" href="/merk">
                         <i class="bi bi-inbox pr-2"></i><span class="d-none d-sm-inline ms-2">Merk</span>
                     </a>
-                    <a class="nav-link text-white" style="white-space: nowrap;" href="#">
+                    <a class="nav-link text-white" style="white-space: nowrap;" href="/unit">
                         <i class="bi bi-file-earmark-arrow-down pr-2"></i><span class="d-none d-sm-inline ms-2">Unit</span>
                     </a>
-                    <a class="nav-link text-white" style="white-space: nowrap;" href="#">
+                    <a class="nav-link text-white" style="white-space: nowrap;" href="/ruang">
                         <i class="bi bi-inbox pr-2"></i><span class="d-none d-sm-inline ms-2">Ruang</span>
                     </a>
-                    <a class="nav-link text-white" style="white-space: nowrap;" href="pencatatan.html">
+                    <a class="nav-link text-white" style="white-space: nowrap;" href="/pencatatan">
                         <i class="bi bi-clipboard2-x pr-2"></i><span class="d-none d-sm-inline ms-2">Pencatatan</span>
                     </a>
-                    <a class="nav-link text-white" style="white-space: nowrap;" href="perolehan.html">
+                    <a class="nav-link text-white" style="white-space: nowrap;" href="/perolehan">
                         <i class="bi bi-inbox pr-2"></i><span class="d-none d-sm-inline ms-2">Perolehan</span>
                     </a>
-                    <a class="nav-link text-white" style="white-space: nowrap;" href="#">
+                    <a class="nav-link text-white" style="white-space: nowrap;" href="/riwayat">
                         <i class="bi bi-clock-history pr-2"></i><span class="d-none d-sm-inline ms-2">Riwayat</span>
+                    </a>
+                    <a class="nav-link text-white" style="white-space: nowrap;" href="/akun">
+                        <i class="bi bi-user pr-2"></i><span class="d-none d-sm-inline ms-2">Akun</span>
                     </a>
                 </nav>
 
@@ -83,7 +86,7 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Kategori</th>
+                                <th>Kode</th>
                                 <th>Nama</th>
                                 <th>Tanggal Buat</th>
                                 <th>Terakhir Update</th>
@@ -98,7 +101,7 @@
                                     <td><%= item.tglBuat %></td>
                                     <td><%= item.tglUpdate %></td>
                                     <td>
-                                        <button type="button" class="btn btn-sm btn-warning btnEdit" data-nama="<%= item.nama %>" data-id="<%= item.idMerk %>" data-toggle="modal" data-target="#exampleModal2">
+                                        <button type="button" class="btn btn-sm btn-warning btnEdit" data-nama="<%= item.nama %>" data-id="<%= item.idKategori %>" data-toggle="modal" data-target="#exampleModal2">
                                             Edit
                                         </button>
                                         <button type="button" class="btn btn-sm btn-danger btnHapus" data-id="<%= item.idKategori %>" data-toggle="modal" data-target="#exampleModal3">
@@ -117,7 +120,7 @@
                         <div class="modal-dialog">
                           <div class="modal-content">
                             <div class="modal-header bg-dark text-white">
-                              <h5 class="modal-title" id="exampleModalLabel1">Tambah Kategori</h5>
+                              <h5 class="modal-title" id="exampleModalLabel1">Tambah KAtegori</h5>
                               <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                               </button>
@@ -125,8 +128,8 @@
                             <div class="modal-body">
                               <form>
                                   <div class="form-group">
-                                    <label for="namaMerk">Nama</label>
-                                    <input type="text" class="form-control" id="namaMerk" placeholder="Printer"> 
+                                    <label for="namaKategori">Nama</label>
+                                    <input type="text" class="form-control" id="namaKategori"> 
                                   </div>
                                 <button type="button" id="btnTambah" class="btn btn-block btn-dark">Tambah Kategori</button>
                               </form>
@@ -148,8 +151,8 @@
                             <div class="modal-body">
                               <form>
                                   <div class="form-group">
-                                    <label for="merkEdit">Nama Kategori</label>
-                                    <input type="text" class="form-control" id="merkEdit" > 
+                                    <label for="kategoriEdit">Nama Kategori</label>
+                                    <input type="text" class="form-control" id="kategoriEdit" > 
                                   </div>
                                 <button type="button" class="btn btn-block btn-warning" id="editButton">Edit Kategori</button>
                               </form>
@@ -187,32 +190,30 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="util.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', (event)=>{
         const btnTambah = document.getElementById("btnTambah");
-        const namaMerk = document.getElementById("namaMerk");
-        let namaEdit = document.getElementById("merkEdit");
+        let namaEdit = document.getElementById("kategoriEdit");
         const btnEdit = document.getElementById("editButton")
         const hapusBtn = document.getElementById("hapusBtn")
-        let idMerk = '';
+        let idKategori = '';
 
         document.querySelectorAll('.btnEdit').forEach(btn =>{
             btn.addEventListener('click', (e)=>{
                 const nama = e.target.getAttribute('data-nama')
-                idMerk = e.target.getAttribute('data-id')
+                idKategori = e.target.getAttribute('data-id')
                 namaEdit.value = nama
             })
         })
         
         document.querySelectorAll('.btnHapus').forEach(btn =>{
             btn.addEventListener('click', (e)=>{
-                idMerk = e.target.getAttribute('data-id')
+                idKategori = e.target.getAttribute('data-id')
             })
         })
         
         btnEdit.addEventListener('click', async()=>{
-            const url = 'http://localhost:3333/updateMerk'
+            const url = 'http://localhost:3333/updateKategori'
             try {
                 const response = await fetch(url, {
                     method: 'PUT',
@@ -221,25 +222,26 @@
                     },
                     body: JSON.stringify({
                         "nama" : namaEdit.value,
-                        "id" : idMerk
+                        "id" : idKategori
                     })
                 })
                 if(response.ok){
-                    alert(`Berhasil Edit data '${idMerk}', '${namaEdit}'`)
-                    window.location.href = '/merk'
+                    alert(`Berhasil Edit data `)
+                    window.location.href = '/kategori'
                     
                 }else{
-                    alert(" Edit data")
-                    window.location.href = '/merk'
+                    alert(" Gagal data")
+                    window.location.href = '/kategori'
                 }
             } catch (e) {
                 alert(e)
-                window.location.href = '/merk'
+                window.location.href = '/kategori'
             }
         })
 
         btnTambah.addEventListener('click', async () => {
-            const url = 'http://localhost:3333/addMerk';
+            const namaMerk = document.getElementById("namaKategori").value;
+            const url = 'http://localhost:3333/addKategori';
             if(namaMerk.value = ""){
                 alert("Form Tidak boleh Kosong")
             }else{
@@ -250,13 +252,13 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        "nama": namaMerk.value
+                        "nama": namaMerk
                     })
                 });
                 
                 if (response.ok) {
                     alert('Data berhasil ditambahkan');
-                    window.location.href = '/merk'
+                    window.location.href = '/kategori'
                 } else {
                     alert('Terjadi kesalahan. Silakan coba lagi.');
                 }
@@ -267,26 +269,27 @@
         });
         
         hapusBtn.addEventListener('click', async ()=>{
-            const url = `${window.urlApi}deleteMerk`
+            const url = `http://localhost:3333/deleteKategori`
             try {
                 const respone = await fetch(url, {
                     method: 'DELETE',
                     headers: {
-                        'Content-Type': 'application/json'                    },
+                        'Content-Type': 'application/json'                    
+                    },
                     body: JSON.stringify({
-                        "id" : idMerk
+                        "id" : idKategori
                     })
                 })
                 if (response.ok) {
                     alert('Berhasil Hapus data'); 
-                    window.location.href = '/merk'; 
+                    window.location.href = '/kategori'; 
                 } else { 
                     alert('Terjadi kesalahan. Silakan coba lagi.'); 
-                    window.location.href = '/merk'; 
+                    window.location.href = '/kategori'; 
                 }
             } catch (e) {
                 alert(e);
-                window.location.href = '/merk'
+                window.location.href = '/kategori'
             }
         })
     })

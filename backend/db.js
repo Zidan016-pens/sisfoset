@@ -201,7 +201,7 @@ const getAllMerk = async ()=>{
 
 const getMerkId = async(id)=>{
     const db = await koneksiDB();
-    const sql = `SELECT * FORM merk where idMerk = '${id}'`
+    const sql = `SELECT * FROM merk WHERE idMerk = '${id}'`
     try {
         const [rows] = await db.execute(sql)
         return rows.length > 0 ? rows : false
@@ -260,17 +260,17 @@ const getAllMasset = async () =>{
     }
 }
 
-const getMassetId = async (id) =>{
-    const db = await koneksiDB()
-    const sql = `SELECT * FROM masteraset WHERE idMasteraset = '${id}'`
+const getMassetById = async (id) => {
+    const db = await koneksiDB();
+    const sql = `SELECT * FROM masteraset WHERE idMasteraset = ?`;
     try {
-        const [data] = await db.execute(sql)
-        return data.length > 0 ? data : false
+        const [data] = await db.execute(sql, [id]);
+        return data.length > 0 ? data[0] : null;
     } catch (e) {
-        console.log(`ada error : ${e}`)
-        return 400;
+        console.error(`Ada error: ${e}`);
+        return null;
     }
-}
+};
 
 const getMassetIdMerk = async (id) =>{
     const db = await koneksiDB()
@@ -299,7 +299,7 @@ const getMassetIdKategori = async (id)=>{
 const addMasset = async (tipe, spesifikasi, deskripsi, idKategori, idMerk, idUser) =>{
     const id = `AST${crypto.randomBytes(3).toString('hex')}`
     const db = await koneksiDB()
-    const sql = `INSERT INTO masteraset VALUES ('${id}', '${tipe}', '${spesifikasi}', '${deskripsi}', '${idKategori}', '${idMerk}', NOW(), NOW(), '${idUser}', '${idUser}')`
+    const sql = `INSERT INTO masteraset VALUES ('${id}', '${tipe}', '${spesifikasi}', '${deskripsi}', "${idKategori}", "${idMerk}", NOW(), NOW(), '${idUser}', '${idUser}')`
     try {
         await db.execute(sql)
         return 200
@@ -311,7 +311,7 @@ const addMasset = async (tipe, spesifikasi, deskripsi, idKategori, idMerk, idUse
 
 const updateMasset = async (id, tipe, spesifikasi, deskripsi, idKategori, idMerk, idUser) =>{
     const db = await koneksiDB()
-    const sql = `UPDATE masteraset tipe = ${tipe}, spesifikasi = ${spesifikasi}, deskripsi = ${deskripsi}, idKategori = ${idKategori}, idMerk = ${idMerk}, tglUpdate = NOW(), idUpdate = '${idUser}' WHERE idMasteraset = ${id}`
+    const sql = `UPDATE masteraset SET tipe = '${tipe}', spesifikasi = '${spesifikasi}', deskripsi = '${deskripsi}', idKategori = '${idKategori}', idMerk = '${idMerk}', tglUpdate = NOW(), idUpdate = '${idUser}' WHERE idMasteraset = '${id}'`
     try {
         await db.execute(sql)
         return 200
@@ -336,7 +336,7 @@ const delMasset = async(id)=>{
 const addUnit = async (nama, idUser)=>{
     const db = await koneksiDB()
     const id = `UNT${crypto.randomBytes(3).toString('hex')}`
-    const sql = `INSERT INTO unit VALUES('${id}', '${nama}', NOW(), NOW(), '${idUser}', ${idUser})`
+    const sql = `INSERT INTO unit VALUES('${id}', '${nama}', NOW(), NOW(), '${idUser}', '${idUser}')`
     try {
         await db.execute(sql)
         return 200;
@@ -394,5 +394,207 @@ const deleteUnit = async (id)=>{
     }
 }
 
+const addRuang = async (nama, idUnit, idUser)=>{
+    const db = await koneksiDB()
+    const id = `RNG${crypto.randomBytes(3).toString('hex')}`
+    const sql = `INSERT INTO ruang VALUES('${id}', '${nama}', '${idUnit}', NOW(), NOW(), '${idUser}', '${idUser}')`
+    try {
+        await db.execute(sql)
+        return 200;
+    } catch (e) {
+        console.log(`ada error : ${e}`)
+        return 400;
+    }
+}
 
-module.exports = {koneksiDB, addLevel, updateLevel, getAllLevel, addAkses, updateAkses, getAksesByNama, getAllAkses, getAllKategori, getKategoriId, addKategori, updateKategori, getAllMerk, getMerkId, addMerk, updateMerk, delAkses, delKategori, delLevel, addMerk, getAllMasset, getMassetIdMerk, getMassetIdKategori, addMasset, updateMasset, delMasset, getMassetId, delMerk, getAllUnit, getUnitById, addUnit, deleteUnit, updateUnit} 
+const getAllRuang = async ()=>{
+    const db = await koneksiDB()
+    const sql = `SELECT * FROM ruang`
+    try {
+        const [data] = await db.execute(sql)
+        return data.length > 0 ? data : []
+    } catch (e) {
+        console.log(`ada error : ${e}`)
+        return 400;
+    } 
+}
+
+const getRuangById = async (id)=>{
+    const db = await koneksiDB()
+    const sql = `SELECT FROM ruang WHERE idRuang = '${id}'`
+    try {
+        const data = await db.execute(sql)
+        return data.length > 0 ? data : false
+    } catch (e) {
+        console.log(`ada error : ${e}`)
+        return 400;
+    }
+}
+
+const updateRuang = async (id, nama, idUnit,idUser)=>{
+    const db = await koneksiDB()
+    const sql = `UPDATE ruang SET nama = '${nama}', idUnit = '${idUnit}', tglUpdate = NOW(), idUpdate = '${idUser}' WHERE idRuang = '${id}'`
+    try {
+        await db.execute(sql)
+        return 200;
+    } catch (e) {
+        console.log(`ada error : ${e}`)
+        return 400;
+    }
+}
+
+const delRuang = async (id)=>{
+    const db = await koneksiDB()
+    const sql = `DELETE FROM ruang WHERE idRuang  = '${id}'`
+    try {
+        await db.execute(sql)
+        return 200;
+    } catch (e) {
+        console.log(`ada error : ${e}`)
+        return 400;
+    }
+}
+
+const addPerolehan = async (nama, keterangan, idUser)=>{
+    const db = await koneksiDB()
+    const id = `PRL${crypto.randomBytes(5).toString('hex')}`
+    const sql = `INSERT INTO perolehan VALUES('${id}', '${nama}', '${keterangan}', NOW(), NOW(), '${idUser}', '${idUser}')`
+    try {
+        await db.execute(sql)
+        return 200;
+    } catch (e) {
+        console.log(`ada error : ${e}`)
+        return 400;
+    }
+}
+
+const getAllPerolehan = async ()=>{
+    const db = await koneksiDB()
+    const sql = `SELECT * FROM perolehan`
+    try {
+        const [data] = await db.execute(sql)
+        return data.length > 0 ? data : []
+    } catch (e) {
+        console.log(`ada error : ${e}`)
+        return 400;
+    } 
+}
+
+const getPerolehanById = async (id) => {
+    const db = await koneksiDB();
+    const sql = `SELECT * FROM perolehan WHERE idPerolehan = ?`;
+    try {
+        const [data] = await db.execute(sql, [id]);
+        return data.length > 0 ? data[0] : null;
+    } catch (e) {
+        console.error(`Ada error: ${e}`);
+        return null;
+    }
+}
+
+
+const updatePerolehan = async (id, nama, keterangan, idUser)=>{
+    const db = await koneksiDB()
+    const sql = `UPDATE perolehan SET nama = '${nama}', keterangan = '${keterangan}', tanggalUpdate = NOW(), idUpdate = '${idUser}' WHERE idPerolehan = '${id}'`
+    try {
+        await db.execute(sql)
+        return 200;
+    } catch (e) {
+        console.log(`ada error : ${e}`)
+        return 400;
+    }
+}
+
+const delPerolehan = async (id)=>{
+    const db = await koneksiDB()
+    const sql = `DELETE FROM perolehan WHERE idPerolehan  = '${id}'`
+    try {
+        await db.execute(sql)
+        return 200;
+    } catch (e) {
+        console.log(`ada error : ${e}`)
+        return 400;
+    }
+}
+
+const addPencatatan = async (idAsset, idPerolehan, harga, tglPeroleh, keterangan, status, idUser)=>{
+    const db = await koneksiDB()
+    const id = `PCT${crypto.randomBytes(5).toString('hex')}`
+    const sql = `INSERT INTO pencatatan VALUES('${id}', '${idAsset}', '${idPerolehan}', '${harga}', '${tglPeroleh}', '${keterangan}', '${status}', NOW(), NOW(), '${idUser}', '${idUser}')`
+    try {
+        await db.execute(sql)
+        return 200;
+    } catch (e) {
+        console.log(`ada error : ${e}`)
+        return 400;
+    }
+}
+
+const updatePencatatan = async (idAsset, idPerolehan, harga, tglPeroleh, keterangan, status, idUser, id) => {
+    const db = await koneksiDB()
+    const sql = `
+        UPDATE pencatatan 
+        SET 
+            idMasteraset = '${idAsset}', 
+            idPerolehan = '${idPerolehan}', 
+            harga = '${harga}', 
+            tglPerolehan = '${tglPeroleh}', 
+            keterangan = '${keterangan}', 
+            status = '${status}', 
+            idUpdate = '${idUser}', 
+            tglUpdate = NOW()
+        WHERE 
+            idPencatatan = '${id}'
+    `;
+    try {
+        await db.query(sql);
+        return 200;
+    } catch (error) {
+        console.log(error);
+        return 400;
+    }
+}
+
+const getAllPencatatan = async () => {
+    const db = await koneksiDB()
+    const sql = `SELECT * FROM pencatatan`;
+    try {
+        const [data] = await db.execute(sql)
+        return data.length > 0 ? data : []
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+}
+
+const getByIdPencatatan = async (id) => {
+    const db = await koneksiDB()
+    const sql = `SELECT * FROM pencatatan WHERE idPencatatan = '${id}'`;
+    try {
+        const data = await db.execute(sql)
+        return data.length > 0 ? data : []
+    } catch (error) {
+        console.error(`Error fetching pencatatan with id ${id}:`, error);
+        return [];
+    }
+}
+
+const delPencatatan = async (id)=>{
+    const db = await koneksiDB()
+    const sql = `DELETE FROM pencatatan WHERE idPencatatan  = '${id}'`
+    try {
+        await db.execute(sql)
+        return 200;
+    } catch (e) {
+        console.log(`ada error : ${e}`)
+        return 400;
+    }
+}
+
+const addRiwayat = async (idPencatatan, idRuang, kondisi, tglAudit)=>{
+    const db = await koneksiDB()
+    const id = `RYT${crypto.randomBytes(5).toString('hex')}`
+    const sql = `INSERT INTO riwayat VALUES('${id}', '${idPencatatan}', '${kondisi}', '${idRuang}', '${tglAudit}', NOW(), NOW())`
+}
+
+module.exports = {koneksiDB, addLevel, updateLevel, getAllLevel, addAkses, updateAkses, getAksesByNama, getAllAkses, getAllKategori, getKategoriId, addKategori, updateKategori, getAllMerk, getMerkId, addMerk, updateMerk, delAkses, delKategori, delLevel, addMerk, getAllMasset, getMassetIdMerk, getMassetIdKategori, addMasset, updateMasset, delMasset, getMassetById, delMerk, getAllUnit, getUnitById, addUnit, deleteUnit, updateUnit, addRuang, getAllRuang, getRuangById, updateRuang, delRuang, addPerolehan, getAllPerolehan, getPerolehanById, delPerolehan, updatePerolehan, addPencatatan, updatePencatatan, delPencatatan, getAllPencatatan, getByIdPencatatan} 

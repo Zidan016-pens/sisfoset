@@ -4,7 +4,8 @@ const { initDB } = require('./backend/initilizing');
 const app = express();
 const session = require('express-session')
 const idAdmin = "LyPiw";
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const { name } = require('ejs');
 
 app.set("view engine", "ejs");
 app.set("views", "views");
@@ -20,18 +21,26 @@ app.use(session({
     }}
 ));
 app.use((req, res, next) => {
-     if (!req.session.role) {
+     if (!req.session.role && !req.session.idUser) {
         req.session.role = 'guest'; 
+        req.session.idUser = 'guest'
     }
     next();
 })
+
+function checkSession(req, res, next){
+    if(req.session.role == 'guest' && req.session.idUser == 'guest'){
+        return res.redirect('/')
+    }
+    next()
+}
 
 function checkRole(role) { 
     return function (req, res, next) { 
         if (req.session.role && req.session.role === role) {
              next(); 
         } else { 
-            res.status(403).send('Akses ditolak: Anda tidak memiliki izin yang cukup'); 
+            res.redirect("/dashboard") 
         } 
     };
 }
@@ -72,17 +81,48 @@ app.post("/login", async (req, res) => {
 });
 
 
-app.get("/dashboard", async (req, res)=>{
-    // res.render("index", {namafile: "dashboard"})
-    return res.send({message : `${req.session.role}, ${req.session.idUser}`});
+app.get("/dashboard", checkSession, async (req, res)=>{
+    res.render("index", {namafile: "dashboard"})
 })
 
-app.get("/dataMaster", async (req, res)=>{
+app.get("/dataMaster", checkSession, async (req, res)=>{
     const mAset = await db.getAllMasset();
-    res.render("index", {namafile: "dataMaster", data: mAset})
+    const kategori = await db.getAllKategori()
+    const merk = await db.getAllMerk()
+    res.render("index", {namafile: "dataMaster", data: mAset, dKategori : kategori, dMerk: merk})
 })
 
-app.post("/addLevel", async (req, res)=>{
+app.post("/addAsset",checkSession, async(req, res)=>{
+    const {tipe, spesifikasi, deskripsi, idKategori, idMerk} = req.body
+    try {
+        await db.addMasset(tipe, spesifikasi, deskripsi, idKategori, idMerk, req.session.idUser)
+        res.sendStatus(200)
+    } catch (e) {
+        res.sendStatus(500)
+    }
+})
+
+app.put("/editAsset", checkSession, async(req, res)=>{
+    const {id, tipe, spesifikasi, deskripsi, idKategori, idMerk} = req.body
+    try {
+        await db.updateMasset(id, tipe, spesifikasi, deskripsi, idKategori, idMerk, req.session.idUser)
+        res.sendStatus(200)
+    } catch (e) {
+        res.sendStatus(500)
+    }
+})
+
+app.delete("/deleteAsset", checkSession, async(req, res)=>{
+    const {id} = req.body
+    try {
+        await db.delMasset(id)
+        res.sendStatus(200)
+    } catch (e) {
+        res.sendStatus(500)
+    }
+})
+
+app.post("/addLevel",checkSession, async (req, res)=>{
      try {
         const {nama} = req.body;
         await db.addLevel(nama, idUser, idUser)
@@ -92,7 +132,7 @@ app.post("/addLevel", async (req, res)=>{
      }
 })
 
-app.put("/updateLevel", async(req, res)=>{
+app.put("/updateLevel",checkSession, async(req, res)=>{
     try {
         const {idLevel, namaBaru} = req.body;
         await db.updateLevel(idLevel, namaBaru, idUser)
@@ -102,20 +142,16 @@ app.put("/updateLevel", async(req, res)=>{
     }
 })
 
-app.get("/user", async (req, res)=>{
+app.get("/akun",checkSession, async (req, res)=>{
     try {
         const rows = await db.getAllAkses()
-        if(rows != false){
-            res.send(rows)
-        }else{
-            res.send({message : 'Tidak Ada User'})
-        }
+        res.render("index", {namafile: "dataMaster", data: rows})
     } catch (e) {
         res.send({message : `${e.message}`})       
     }
 })
 
-app.post("/addUser", async(req, res)=>{
+app.post("/addUser",checkSession, async(req, res)=>{
     const {nama, username, password, status} = req.body
     try {
         const respone = await db.addAkses(nama, username, password, status, idAdmin, idUser, idUser)
@@ -129,7 +165,7 @@ app.post("/addUser", async(req, res)=>{
     }
 })
 
-app.put("/updateUser", async(req, res)=>{
+app.put("/updateUser",checkSession, async(req, res)=>{
     const {idAkses, nama, username, password, status, idLevel} = req.body
     try {
         const respone = await db.updateAkses(idAkses, nama, username, password, status, idLevel, idUser, idUser)
@@ -143,7 +179,7 @@ app.put("/updateUser", async(req, res)=>{
     }
 })
 
-app.get("/merk", async(req, res)=>{
+app.get("/merk",checkSession, async(req, res)=>{
     try {
         const respone = await db.getAllMerk();
         res.render("index", {namafile: "merk", data: respone})
@@ -152,7 +188,7 @@ app.get("/merk", async(req, res)=>{
     }
 })
 
-app.get("/merkId/:id", async(req, res)=>{
+app.get("/merkId/:id",checkSession, async(req, res)=>{
     const id = req.params.id
     try {
         const respone = await db.getMerkId(id);
@@ -166,24 +202,20 @@ app.get("/merkId/:id", async(req, res)=>{
     }
 })
 
-app.post("/addMerk", async(req, res)=>{
+app.post("/addMerk",checkSession, async(req, res)=>{
     const {nama} = req.body
     try {
-        const respone = await db.addMerk(nama, idUser)
-        if(respone == 200){
-            res.send({message : 'Berhasil Insert'})
-        }else{
-            res.send({message : 'Ada error pada insert'})
-        }
+        await db.addMerk(nama, req.session.idUser)
+        res.sendStatus(200)
     } catch (e) {
         res.send({message : `${e.message}`})
     }
 })
 
-app.put("/updateMerk", async(req, res)=>{
+app.put("/updateMerk",checkSession, async(req, res)=>{
     const {nama, id} = req.body
     try {
-        const respone = await db.updateMerk(nama, idUser, id)
+        const respone = await db.updateMerk(nama, req.session.idUser, id)
         if(respone == 200){
             res.send({message : 'Berhasil Insert'})
         }else{
@@ -194,7 +226,7 @@ app.put("/updateMerk", async(req, res)=>{
     }
 })
 
-app.delete("/deleteMerk", async (req, res)=>{
+app.delete("/deleteMerk",checkSession, async (req, res)=>{
     const {id} = req.body
     try {
         await db.delMerk(id)
@@ -204,7 +236,7 @@ app.delete("/deleteMerk", async (req, res)=>{
     }
 })
 
-app.get("/kategori", async(req, res)=>{
+app.get("/kategori",checkSession, async(req, res)=>{
     try {
         const respone = await db.getAllKategori();
         res.render("kategori", {namafile : "kategori", data : respone})
@@ -213,7 +245,7 @@ app.get("/kategori", async(req, res)=>{
     }
 })
 
-app.get("/kategoriId/:id", async(req, res)=>{
+app.get("/kategoriId/:id",checkSession,  async(req, res)=>{
     const id = req.params.id
     try {
         const respone = await db.getKategoriId(id);
@@ -227,10 +259,10 @@ app.get("/kategoriId/:id", async(req, res)=>{
     }
 })
 
-app.post("/addKategori", async(req, res)=>{
+app.post("/addKategori", checkSession, async(req, res)=>{
     const {nama} = req.body
     try {
-        const respone = await db.addKategori(nama, idUser)
+        const respone = await db.addKategori(nama, req.session.idUser)
         if(respone == 200){
             res.send({message : 'Berhasil Insert'})
         }else{
@@ -241,10 +273,10 @@ app.post("/addKategori", async(req, res)=>{
     }
 })
 
-app.put("/updateKategori", async(req, res)=>{
+app.put("/updateKategori", checkSession, async(req, res)=>{
     const {nama, id} = req.body
     try {
-        const respone = await db.updateKategori(id, nama, idUser)
+        const respone = await db.updateKategori(id, nama, req.session.idUser)
         if(respone == 200){
             res.send({message : 'Berhasil Update'})
         }else{
@@ -255,7 +287,171 @@ app.put("/updateKategori", async(req, res)=>{
     }
 })
 
-const PORT = process.env.PORT || 3333;
+app.delete("/deleteKategori", checkSession, async(req, res)=>{
+    const {id} = req.body
+    try {
+        await db.delKategori(id)
+        res.sendStatus(200)
+    } catch (e) {
+        res.sendStatus(500)
+    }
+})
+
+app.get("/unit", checkSession, async(req, res)=>{
+    const data = await db.getAllUnit()
+    res.render("index", {namafile : "unit", data : data})
+})
+
+app.post("/addUnit", checkSession, async(req, res)=>{
+    const {nama} = req.body;
+    try {
+        await db.addUnit(nama, req.session.idUser)
+        res.sendStatus(200)
+    } catch (e) {
+        res.sendStatus(500)
+    }
+})
+
+app.put("/updateUnit", checkSession, async(req, res)=>{
+    const {nama, id} = req.body
+    try {
+        await db.updateUnit(id, nama, req.session.idUser)
+        res.sendStatus(200)
+    } catch (e) {
+        res.sendStatus(500)
+    } 
+})
+
+app.delete("/deleteUnit", checkSession, async(req, res)=>{
+    const {id} = req.body
+    try {
+        await db.deleteUnit(id)
+        res.sendStatus(200)
+    } catch (e) {
+        res.sendStatus(500)
+    }
+})
+
+app.get("/ruang", checkSession, async(req,res)=>{
+    const data = await db.getAllRuang()
+    const unit = await db.getAllUnit()
+    res.render("index", {namafile : "ruang", data: data, unit : unit}) 
+})
+
+app.post("/addRuang", checkSession, async(req, res)=>{
+    const {nama, idUnit} = req.body
+    try {
+        await db.addRuang(nama, idUnit, req.session.idUser)
+        res.sendStatus(200)
+    } catch (e) {
+        res.sendStatus(500)
+    }
+})
+
+app.put("/updateRuang", checkSession, async(req, res)=>{
+    const {nama, idUnit, id} = req.body
+    try {
+        await db.updateRuang(id, nama, idUnit, req.session.idUser)
+        res.sendStatus(200)
+    } catch (e) {
+        res.sendStatus(500)
+    }
+})
+
+app.delete("/deleteRuang", checkSession, async(req, res)=>{
+    const {id} = req.body
+    try {
+        await db.delRuang(id)
+        res.sendStatus(200)
+    } catch (e) {
+        res.sendStatus(500)
+    }
+})
+
+app.get("/perolehan", checkSession, async(req, res)=>{
+    const data = await db.getAllPerolehan()
+    res.render("index", {namafile : "perolehan", data : data})
+})
+
+app.post("/addPerolehan", checkSession, async(req, res)=>{
+    const {nama, keterangan} = req.body
+    try {
+        await db.addPerolehan(nama, keterangan, req.session.idUser)
+        res.sendStatus(200)
+    } catch (e) {
+        res.sendStatus(500)
+    }
+})
+
+app.put("/updatePerolehan", checkSession, async(req, res)=>{
+    const {nama, keterangan, id}= req.body
+    try {
+        await db.updatePerolehan(id, nama, keterangan, req.session.idUser)
+        res.sendStatus(200)
+    } catch (e) {
+        res.sendStatus(500) 
+    }
+})
+
+app.delete("/deletePerolehan", checkSession, async (req, res)=>{
+    const {id} = req.body
+    try {
+        await db.delPerolehan(id)
+        res.sendStatus(200)
+    } catch (e) {
+        res.sendStatus(500) 
+    }
+})
+
+app.get("/pencatatan", checkSession, async(req, res)=>{
+    const data = await db.getAllPencatatan()
+    const aset = await db.getAllMasset()
+    const peroleh = await db.getAllPerolehan()
+    res.render("index", {namafile:"pencatatan", data: data, aset : aset, peroleh : peroleh})
+})
+
+app.post("/detailPencatatan", checkSession, async(req, res)=>{
+    const {idPeroleh, idAsset} = req.body
+    try {
+        const peroleh = await db.getPerolehanById(idPeroleh)
+        const asset = await db.getMassetById(idAsset)
+        res.status(200).json({"peroleh": peroleh, "asset": asset})
+    } catch (e) {
+        res.sendStatus(500) 
+    }
+})
+
+app.post("/addPencatatan", checkSession, async(req, res)=>{
+    const {idAsset, idPerolehan, harga, tglPeroleh, keterangan, status}= req.body
+    try {
+        await db.addPencatatan(idAsset, idPerolehan, harga, tglPeroleh, keterangan, status, req.session.idUser)
+        res.sendStatus(200)
+    } catch (e) {
+        res.sendStatus(500) 
+    }
+})
+
+app.put("/updatePencatatan", checkSession, async(req, res)=>{
+    const {idAsset, idPerolehan, harga, tglPeroleh, keterangan, status, id} = req.body
+    try {
+        await db.updatePencatatan(idAsset, idPerolehan, harga, tglPeroleh, keterangan, status, req.session.idUser, id)
+        res.sendStatus(200)
+    } catch (e) {
+        res.sendStatus(500) 
+    }
+})
+
+app.delete("/deletePencatatan", checkSession, async(req, res)=>{
+    const {id}= req.body
+    try {
+        await db.delPencatatan(id)
+        res.sendStatus(200)
+    } catch (e) {
+        res.sendStatus(500) 
+    }
+})
+
+// const PORT = process.env.PORT || 3333;
 app.listen(3333, () => {
     console.log("Web running : " + 3333);
 })

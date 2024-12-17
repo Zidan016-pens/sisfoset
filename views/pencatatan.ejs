@@ -24,34 +24,37 @@
                 </nav>
 
                 <nav class="nav flex-column">
-                    <a class="nav-link text-white" style="white-space: nowrap;" href="dashboard.html">
-                        <i class="bi bi-speedometer2 pr-2"></i><span class="d-none d-sm-inline ms-2">Dashboard</span>
-                    </a>
-                    <a class="nav-link text-white" style="white-space: nowrap;" href="dataMaster.html">
-                        <i class="bi bi-collection pr-2"></i><span class="d-none d-sm-inline ms-2">Data Master</span>
-                    </a>
-                    <a class="nav-link text-white" style="white-space: nowrap;" href="#">
-                        <i class="bi bi-inbox pr-2"></i><span class="d-none d-sm-inline ms-2">Kategori</span>
-                    </a>
-                    <a class="nav-link text-white" style="white-space: nowrap;" href="#">
-                        <i class="bi bi-inbox pr-2"></i><span class="d-none d-sm-inline ms-2">Merk</span>
-                    </a>
-                    <a class="nav-link text-white" style="white-space: nowrap;" href="#">
-                        <i class="bi bi-file-earmark-arrow-down pr-2"></i><span class="d-none d-sm-inline ms-2">Unit</span>
-                    </a>
-                    <a class="nav-link text-white" style="white-space: nowrap;" href="#">
-                        <i class="bi bi-inbox pr-2"></i><span class="d-none d-sm-inline ms-2">Ruang</span>
-                    </a>
-                    <a class="nav-link text-white" style="white-space: nowrap;" href="pencatatan.html">
-                        <i class="bi bi-clipboard2-x pr-2"></i><span class="d-none d-sm-inline ms-2">Pencatatan</span>
-                    </a>
-                    <a class="nav-link text-white" style="white-space: nowrap;" href="perolehan.html">
-                        <i class="bi bi-inbox pr-2"></i><span class="d-none d-sm-inline ms-2">Perolehan</span>
-                    </a>
-                    <a class="nav-link text-white" style="white-space: nowrap;" href="#">
-                        <i class="bi bi-clock-history pr-2"></i><span class="d-none d-sm-inline ms-2">Riwayat</span>
-                    </a>
-                </nav>
+                  <a class="nav-link text-white" style="white-space: nowrap;" href="/dashboard">
+                      <i class="bi bi-speedometer2 pr-2"></i><span class="d-none d-sm-inline ms-2">Dashboard</span>
+                  </a>
+                  <a class="nav-link text-white" style="white-space: nowrap;" href="/dataMaster">
+                      <i class="bi bi-collection pr-2"></i><span class="d-none d-sm-inline ms-2">Data Master</span>
+                  </a>
+                  <a class="nav-link text-white" style="white-space: nowrap;" href="/kategori">
+                      <i class="bi bi-inbox pr-2"></i><span class="d-none d-sm-inline ms-2">Kategori</span>
+                  </a>
+                  <a class="nav-link text-white" style="white-space: nowrap;" href="/merk">
+                      <i class="bi bi-inbox pr-2"></i><span class="d-none d-sm-inline ms-2">Merk</span>
+                  </a>
+                  <a class="nav-link text-white" style="white-space: nowrap;" href="/unit">
+                      <i class="bi bi-file-earmark-arrow-down pr-2"></i><span class="d-none d-sm-inline ms-2">Unit</span>
+                  </a>
+                  <a class="nav-link text-white" style="white-space: nowrap;" href="/ruang">
+                      <i class="bi bi-inbox pr-2"></i><span class="d-none d-sm-inline ms-2">Ruang</span>
+                  </a>
+                  <a class="nav-link text-white" style="white-space: nowrap;" href="/pencatatan">
+                      <i class="bi bi-clipboard2-x pr-2"></i><span class="d-none d-sm-inline ms-2">Pencatatan</span>
+                  </a>
+                  <a class="nav-link text-white" style="white-space: nowrap;" href="/perolehan">
+                      <i class="bi bi-inbox pr-2"></i><span class="d-none d-sm-inline ms-2">Perolehan</span>
+                  </a>
+                  <a class="nav-link text-white" style="white-space: nowrap;" href="/riwayat">
+                      <i class="bi bi-clock-history pr-2"></i><span class="d-none d-sm-inline ms-2">Riwayat</span>
+                  </a>
+                  <a class="nav-link text-white" style="white-space: nowrap;" href="/akun">
+                      <i class="bi bi-user pr-2"></i><span class="d-none d-sm-inline ms-2">Akun</span>
+                  </a>
+              </nav>
 
             </div>
             <!-- sidebar end -->
@@ -83,38 +86,38 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>idPencatatan</th>
-                                <th>idMasteraset</th>
-                                <th>idPerolehan</th>
+                                <th>Kode</th>
                                 <th>Harga</th>
                                 <th>TglPerolehan</th>
                                 <th>Keterangan</th>
                                 <th>Status</th>
+                                <th>Detail</th>
                                 <th>Tgl Buat</th>
                                 <th>Tgl Update</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
+                          <% data.forEach((item) => { %>
                             <tr>
-                                <td>56564</td>
-                                <td>56564</td>
-                                <td>56564</td>
-                                <td>Rp. 13.000</td>
-                                <td>12/12/2024</td>
-                                <td>Aman masuk</td>
-                                <td class="text-success">Bagus</td>
-                                <td>12/12/2024</td>
-                                <td>12/12/2024</td>
+                                <td><%= item.idPencatatan %></td>
+                                <td><%= item.harga %></td>
+                                <td><%= item.tglPerolehan %></td>
+                                <td><%= item.keterangan %></td>
+                                <td><%= item.status %></td>
+                                <td><button type="button" class="btn btn-sm btnDetail" data-id="<%= item.idPencatatan %>" data-harga="<%= item.harga %>" data-tglPer="<%= item.tglPerolehan %>" data-ket="<%= item.keterangan %>" data-status="<%= item.status %>" data-tglB="<%= item.tglBuat %>" data-tglU="<%= item.tglUpdate %>" data-asset="<%= item.idMasteraset %>" data-per="<%= item.idPerolehan %>" data-toggle="modal" data-target="#exampleModal4">lihat detail</button></td>
+                                <td><%= item.tglBuat %></td>
+                                <td><%= item.tglUpdate %></td>
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#exampleModal2">
-                                    Edit
+                                    <button type="button" class="btn btn-sm btn-warning btnEdit" data-id="<%= item.idPencatatan %>" data-harga="<%= item.harga %>" data-tglPer="<%= item.tglPerolehan %>" data-ket="<%= item.keterangan %>" data-status="<%= item.status %>" data-tglB="<%= item.tglBuat %>" data-tglU="<%= item.tglUpdate %>" data-asset="<%= item.idMasteraset %>" data-per="<%= item.idPerolehan %>" data-toggle="modal" data-target="#exampleModal2">
+                                        Edit
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-danger">
-                                    Delete
+                                    <button type="button" class="btn btn-sm btn-danger btnHapus" data-id="<%= item.idPencatatan %>" data-toggle="modal" data-target="#exampleModal3">
+                                        Hapus
                                     </button>
                                 </td>
                             </tr>
+                        <% }) %> 
                         </tbody>
                     </table>
                 </div>
@@ -132,47 +135,46 @@
                             </div>
                             <div class="modal-body">
                               <form>
-                                  <div class="form-group">
-                                    <label for="idPencatatan">idPencatatan</label>
-                                    <input type="text" class="form-control" id="idPencatatan" placeholder="idPencatatan"> 
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="idMasteraset">idMasteraset</label>
-                                    <input type="text" class="form-control" id="idMasteraset" placeholder="idMasteraset"> 
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="idPerolehan">idPerolehan</label>
-                                    <input type="text" class="form-control" id="idPerolehan" placeholder="idPerolehan"> 
-                                  </div>
+                                <div>
+                                  <label for="aset">aset</label>
+                                  <select class="form-control" id="aset">
+                                      <option value="" disabled selected>Pilih Aset</option>
+                                      <% aset.forEach((item)=>{ %>
+                                          <option class="asetId" data-id="<%= item.idMasteraset %>"><%= item.spesifikasi %></option>
+                                          <%
+                                      }) %>
+                                  </select>
+                                 </div>
+                                 <div>
+                                  <label for="peroleh">perolehan</label>
+                                  <select class="form-control" id="perolehan">
+                                      <option value="" disabled selected>Pilih Perolehan</option>
+                                      <% peroleh.forEach((item)=>{ %>
+                                          <option class="perolehanId" data-id="<%= item.idPerolehan %>"><%= item.nama %></option>
+                                          <%
+                                      }) %>
+                                  </select>
+                                 </div>
                                   <div class="form-group">
                                     <label for="harga">Harga</label>
                                     <input type="text" class="form-control" id="harga" placeholder="Harga"> 
                                   </div>
                                   <div class="form-group">
                                     <label for="tglPerolehan">TglPerolehan</label>
-                                    <input type="text" class="form-control" id="tglPerolehan" placeholder="TglPerolehan"> 
+                                    <input type="date" class="form-control" id="tglPerolehan" placeholder="TglPerolehan"> 
                                   </div>
                                   <div class="form-group">
                                     <label for="keterangan">Katerangan</label>
                                     <input type="text" class="form-control" id="keterangan" placeholder="Keterangan"> 
                                   </div>
                                   <div class="form-group">
-                                    <label for="exampleFormControlSelect1">Status</label>
-                                    <select class="form-control" id="exampleFormControlSelect1">
-                                      <option>Bagus</option>
-                                      <option>Dalam perbaikan</option>
-                                      <option>Rusak</option>
+                                    <label for="status">Status</label>
+                                    <select class="form-control" id="status">
+                                      <option>yes</option>
+                                      <option>no</option>
                                     </select>
                                   </div>
-                                  <div class="form-group">
-                                    <label for="tglBuat">TglBuat</label>
-                                    <input type="text" class="form-control" id="tglBuat" placeholder="TglBuat"> 
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="tglUpdate">TglUpdate</label>
-                                    <input type="text" class="form-control" id="tglUpdate" placeholder="TglUpdate"> 
-                                  </div>
-                                <button type="submit" class="btn btn-block btn-dark">Tambah Pencatatan</button>
+                                <button type="button" id="btnTambah" class="btn btn-block btn-dark">Tambah Pencatatan</button>
                               </form>
                             </div>
                           </div>
@@ -180,67 +182,117 @@
                     </div>
 
                 <!-- Modal 2-->
-                    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
-                        <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="modal-header bg-dark text-white">
-                              <h5 class="modal-title" id="exampleModalLabel2">Edit Pencatatan</h5>
-                              <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header bg-dark text-white">
+                        <h5 class="modal-title" id="exampleModalLabel1">Edit Pencatatan</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <form>
+                          <div>
+                            <label for="aset">aset</label>
+                            <select class="form-control" id="asetEdit">
+                                <option value="" disabled selected>Pilih Aset</option>
+                                <% aset.forEach((item)=>{ %>
+                                    <option class="asetId" data-id="<%= item.idMasteraset %>"><%= item.spesifikasi %></option>
+                                    <%
+                                }) %>
+                            </select>
+                           </div>
+                           <div>
+                            <label for="peroleh">perolehan</label>
+                            <select class="form-control" id="perolehanEdit">
+                                <option value="" disabled selected>Pilih Perolehan</option>
+                                <% peroleh.forEach((item)=>{ %>
+                                    <option class="perolehanId" data-id="<%= item.idPerolehan %>"><%= item.nama %></option>
+                                    <%
+                                }) %>
+                            </select>
+                           </div>
+                            <div class="form-group">
+                              <label for="harga">Harga</label>
+                              <input type="text" class="form-control" id="hargaEdit" placeholder="Harga"> 
+                            </div>
+                            <div class="form-group">
+                              <label for="tglPerolehan">TglPerolehan</label>
+                              <input type="date" class="form-control" id="tglPerolehanEdit" placeholder="TglPerolehan"> 
+                            </div>
+                            <div class="form-group">
+                              <label for="keterangan">Katerangan</label>
+                              <input type="text" class="form-control" id="keteranganEdit" placeholder="Keterangan"> 
+                            </div>
+                            <div class="form-group">
+                              <label for="status">Status</label>
+                              <select class="form-control" id="statusEdit">
+                                <option>yes</option>
+                                <option>no</option>
+                              </select>
+                            </div>
+                          <button type="button" id="editBtn" class="btn btn-block btn-dark">Edit Pencatatan</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+
+              <!-- modal3 -->
+              <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="confirmDeleteModalLabel">Konfirmasi Hapus</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <div class="modal-body">
-                              <form>
-                                  <div class="form-group">
-                                    <label for="idPencatatan">idPencatatan</label>
-                                    <input type="text" class="form-control" id="idPencatatan" value="56564"> 
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="idMasteraset">idMasteraset</label>
-                                    <input type="text" class="form-control" id="idMasteraset" value="56564"> 
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="idPerolehan">idPerolehan</label>
-                                    <input type="text" class="form-control" id="idPerolehan" value="56564"> 
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="harga">Harga</label>
-                                    <input type="text" class="form-control" id="harga" value="Rp. 13.000"> 
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="tglPerolehan">TglPerolehan</label>
-                                    <input type="text" class="form-control" id="tglPerolehan" value="12/12/2024"> 
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="harga">Harga</label>
-                                    <input type="text" class="form-control" id="harga" value="Rp. 13.000"> 
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="keterangan">Katerangan</label>
-                                    <input type="text" class="form-control" id="keterangan" value="Aman masuk"> 
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="exampleFormControlSelect1">Status</label>
-                                    <select class="form-control" id="exampleFormControlSelect1">
-                                      <option>Bagus</option>
-                                      <option>Dalam perbaikan</option>
-                                      <option>Rusak</option>
-                                    </select>
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="tglBuat">TglBuat</label>
-                                    <input type="text" class="form-control" id="tglBuat" value="12/12/2024"> 
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="tglUpdate">TglUpdate</label>
-                                    <input type="text" class="form-control" id="tglUpdate" value="12/12/2024"> 
-                                  </div>
-                                <button type="submit" class="btn btn-block btn-warning">Edit Pencatatan</button>
-                              </form>
-                            </div>
-                          </div>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Apakah anda yakin ingin menghapus data ?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak</button>
+                            <button type="button" class="btn btn-danger" id="hapusBtn">Ya</button>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- modal4 -->
+            <div class="modal fade" id="exampleModal4" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="confirmDeleteModalLabel">Detail Pencatatan</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <div class="modal-body">
+                          <h1>Perolehan</h1>
+                          <p id="idDetail"></p>
+                          <p id="hargaDetail"></p>
+                          <p id="tglPerolehDetail"></p>
+                          <p id="statusDetail"></p>
+                          <p id="keteranganDetail"></p>
+                          <h1>Asset</h1>
+                          <p id="asetDetail"></p>
+                          <p id="namaDetail"></p>
+                          <h1>Perolehan</h1>
+                          <p id="perolehDetail"></p>
+                          <p id="namaPeroleh"></p>
+                          <h1>Tanggal</h1>
+                          <p id="tglBDetail"></p>
+                          <p id="tglUDetail"></p>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
 
             </div>
         </div>
@@ -251,5 +303,202 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
+  <script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const btnTambah = document.getElementById('btnTambah')
+      const hargaEdit = document.getElementById('hargaEdit')
+      const tglPerolehEdit = document.getElementById('tglPerolehanEdit')
+      const keteranganEdit = document.getElementById('keteranganEdit')
+      const statusEdit = document.getElementById('statusEdit')
+      const editBtn = document.getElementById('editBtn')
+      const hapusBtn = document.getElementById('hapusBtn')
+      let idAset
+      let idPeroleh;
+      let id;
 
+      document.querySelector('#aset').addEventListener('change', function() {
+             const selectedOption = document.querySelectorAll('#aset option');
+             selectedOption.forEach((data)=>{
+                if(data.selected){
+                    idAset = data.getAttribute('data-id')
+                    console.log(idAset)
+                }
+             })
+        });
+
+      document.querySelector('#perolehan').addEventListener('change', function() {
+             const selectedOption = document.querySelectorAll('#perolehan option');
+             selectedOption.forEach((data)=>{
+                if(data.selected){
+                    idPeroleh = data.getAttribute('data-id')
+                    console.log(idPeroleh)
+                }
+             })
+        });
+
+      btnTambah.addEventListener('click', async()=>{
+        const harga = document.getElementById('harga').value
+        const tglPerolehan = document.getElementById('tglPerolehan').value
+        const keterangan = document.getElementById('keterangan').value
+        const status = document.getElementById('status').value
+
+        const url = 'http://localhost:3333/addPencatatan'
+
+        try {
+          const respone = await fetch(url, {
+            method:'POST',
+            headers:{
+              'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({
+              "idAsset": idAset ,
+              "idPerolehan": idPeroleh,
+              "harga": harga,
+              "keterangan": keterangan,
+              "status": status,
+              "tglPeroleh": tglPerolehan
+            })
+          })
+          if(respone.ok){
+            alert('Berhasil tambah data')
+            window.location.href='/pencatatan'
+          }else{
+            alert('Gagal tambah data')
+          }
+        } catch (e) {
+          alert('Periksa jaringan')
+        }
+      })
+    
+      document.querySelectorAll('.btnEdit').forEach(data=>{
+        data.addEventListener('click', (e)=>{
+          hargaEdit.value = e.target.getAttribute('data-harga')
+          id = e.target.getAttribute('data-id')
+          const tglPerolehFormatted = new Date(data.getAttribute('data-tglPer'));
+          const tglPerolehISO = tglPerolehFormatted.toISOString().split('T')[0]; 
+          tglPerolehEdit.value = tglPerolehISO;
+          keteranganEdit.value = e.target.getAttribute('data-ket')
+          statusEdit.value = e.target.getAttribute('data-status')
+          idAset = e.target.getAttribute('data-asset')
+          idPeroleh = e.target.getAttribute('data-per')
+          console.log(idAset)
+          console.log(id)
+          console.log(idPeroleh)
+          console.log(statusEdit.value)
+          console.log(tglPerolehEdit.value)
+          console.log(keteranganEdit.value)
+          console.log(hargaEdit.value)
+          document.querySelector(`#asetEdit [data-id="${idAset}"]`).selected = true;
+          document.querySelector(`#perolehanEdit [data-id="${idPeroleh}"]`).selected = true;
+        })
+      })
+      
+      editBtn.addEventListener('click', async()=>{
+        const hargaEdit = document.getElementById('hargaEdit').value
+        const tglPerolehEdit = document.getElementById('tglPerolehanEdit').value
+        const keteranganEdit = document.getElementById('keteranganEdit').value
+        const statusEdit = document.getElementById('statusEdit').value
+        const url = 'http://localhost:3333/updatePencatatan'
+
+        try {
+          const respone = await fetch(url, {
+            method:'PUT',
+            headers:{
+              'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              "idAsset":idAset,
+              "idPerolehan":idPeroleh,
+              "harga":hargaEdit,
+              "tglPeroleh":tglPerolehEdit,
+              "keterangan":keteranganEdit,
+              "status":statusEdit,
+              "id":id
+            })
+          })
+
+          if(respone.ok){
+            alert('Berhasil Edit data')
+            window.location.href='/pencatatan'
+          }else{
+            alert('Gagal Edit data')
+          }
+        } catch (e) {
+          alert('Periksa Jaringan')
+        }
+      })
+
+      document.querySelectorAll('.btnHapus').forEach(btn=>{
+        btn.addEventListener('click', (e)=>{
+          id = e.target.getAttribute('data-id')
+        })
+      })
+
+      hapusBtn.addEventListener('click', async()=>{
+        const url = 'http://localhost:3333/deletePencatatan'
+        try {
+          const respone = await fetch(url, {
+            method:'DELETE',
+            headers:{
+              'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+              "id": id
+            })
+          })
+          if(respone.ok){
+            alert('Berhasil hapus data')
+            window.location.href='/pencatatan'
+          }else{
+            alert('gagal hapus data')
+          }
+        } catch (e) {
+          alert('Periksa Jaringan')
+        }
+      })
+    
+      document.querySelectorAll('.btnDetail').forEach(btn=>{
+        btn.addEventListener('click', async(e)=>{
+          document.getElementById('idDetail').innerText = `Kode : ${e.target.getAttribute('data-id')}`
+          document.getElementById('hargaDetail').innerText = `Harga : ${e.target.getAttribute('data-harga')}`
+          document.getElementById('tglPerolehDetail').innerText = `Tanngal Peroleh : ${e.target.getAttribute('data-tglPer')}`
+          document.getElementById('statusDetail').innerText = `Status : ${e.target.getAttribute('data-status')}`
+          document.getElementById('keteranganDetail').innerText = `Keterangan : ${e.target.getAttribute('data-ket')}`
+          idAset = e.target.getAttribute('data-asset')
+          idPeroleh = e.target.getAttribute('data-per')
+          document.getElementById('asetDetail').innerText = `Kode Aset : ${idAset}`
+          document.getElementById('perolehDetail').innerText = `Kode Aset : ${idPeroleh}`
+          document.getElementById('tglBDetail').innerText = `Tanggal Buat : ${e.target.getAttribute('data-tglB')}`
+          document.getElementById('tglUDetail').innerText = `Terkahir Update : ${e.target.getAttribute('data-tglU')}`
+
+          const url = 'http://localhost:3333/detailPencatatan'
+          try {
+            const respone = await fetch(url, {
+              method:'POST',
+              headers:{
+                'Content-Type': 'application/json'
+              },
+              body:JSON.stringify({
+                "idAsset": idAset,
+                "idPeroleh": idPeroleh
+              })
+            })
+            if(respone.ok){
+              const data = await respone.json()
+              const mAset = data["asset"]
+              const mPeroleh = data["peroleh"]
+              document.getElementById('namaDetail').innerText = `Spesifikasi Asset : ${mAset.spesifikasi}` 
+              document.getElementById('namaPeroleh').innerText = `Nama Peroleh : ${mPeroleh.nama}`
+            }else{
+              document.getElementById('namaDetail').innerText = `Spesifikasi Asset : Ada Kesalahan` 
+              document.getElementById('namaPeroleh').innerText = `Nama Peroleh : ada kesalahan`
+            }
+          } catch (e) {
+            document.getElementById('namaDetail').innerText = `Spesifikasi Asset : Ada Kesalahan` 
+              document.getElementById('namaPeroleh').innerText = `Nama Peroleh : ada kesalahan`
+          }
+        })
+      })
+    })
+  </script>
 </html>

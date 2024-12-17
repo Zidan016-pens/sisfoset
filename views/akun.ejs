@@ -74,9 +74,9 @@
 
                 <!-- header main start -->
                 <div class="container d-sm-flex align-items-center justify-content-between my-3">
-                    <p class="h2">Merk</p>
+                    <p class="h2">Ruang</p>
                     <button type="button" class="btn btn-sm btn-dark" data-toggle="modal" data-target="#exampleModal1">
-                        Tambah Merk
+                        Tambah Ruang
                     </button>
                 </div>
                 <!-- header main end -->
@@ -86,8 +86,11 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Merk</th>
+                                <th>Kode</th>
                                 <th>Nama</th>
+                                <th>Username</th>
+                                <th>Id Role</th>
+                                <th>Status</th>
                                 <th>Tanggal Buat</th>
                                 <th>Terakhir Update</th>
                                 <th>Aksi</th>
@@ -96,16 +99,16 @@
                         <tbody>
                             <% data.forEach((item) => { %>
                                 <tr>
-                                    <td><%= item.idMerk %></td>
+                                    <td><%= item.idAkses %></td>
                                     <td><%= item.nama %></td>
+                                    <td><%= item.username %></td>
+                                    <td><%= item.idLevel %></td>
+                                    <td><%= item.status %></td>
                                     <td><%= item.tglBuat %></td>
                                     <td><%= item.tglUpdate %></td>
                                     <td>
-                                        <button type="button" class="btn btn-sm btn-warning btnEdit" data-nama="<%= item.nama %>" data-id="<%= item.idMerk %>" data-toggle="modal" data-target="#exampleModal2">
+                                        <button type="button" class="btn btn-sm btn-warning btnEdit" data-nama="<%= item.nama %>" data-username="<%= item.username %>" data-id="<%= item.idAkses %>" data-status="<%= item.status %>" data-level="<%= item.idLevel%>" data-password="<%= item.password %>" data-toggle="modal" data-target="#exampleModal2">
                                             Edit
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-danger btnHapus" data-id="<%= item.idMerk %>" data-toggle="modal" data-target="#exampleModal3">
-                                            Hapus
                                         </button>
                                     </td>
                                 </tr>
@@ -120,7 +123,7 @@
                         <div class="modal-dialog">
                           <div class="modal-content">
                             <div class="modal-header bg-dark text-white">
-                              <h5 class="modal-title" id="exampleModalLabel1">Tambah Pencatatan</h5>
+                              <h5 class="modal-title" id="exampleModalLabel1">Tambah Akun</h5>
                               <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                               </button>
@@ -128,10 +131,13 @@
                             <div class="modal-body">
                               <form>
                                   <div class="form-group">
-                                    <label for="namaMerk">Nama</label>
-                                    <input type="text" class="form-control" id="namaMerk" placeholder="EPSON"> 
+                                    <label for="namaRuang">Nama</label>
+                                    <input type="text" class="form-control" id="namaRuang"> 
                                   </div>
-                                <button type="button" id="btnTambah" class="btn btn-block btn-dark">Tambah Merk</button>
+                                  <div>
+                                    <label for="unit">Unit</label>
+                                   </div>
+                                <button type="button" id="btnTambah" class="btn btn-block btn-dark">Tambah Ruang</button>
                               </form>
                             </div>
                           </div>
@@ -143,7 +149,7 @@
                         <div class="modal-dialog">
                           <div class="modal-content">
                             <div class="modal-header bg-dark text-white">
-                              <h5 class="modal-title" id="exampleModalLabel2">Edit Merk</h5>
+                              <h5 class="modal-title" id="exampleModalLabel2">Edit Ruang</h5>
                               <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                               </button>
@@ -151,10 +157,14 @@
                             <div class="modal-body">
                               <form>
                                   <div class="form-group">
-                                    <label for="merkEdit">Nama Merk</label>
-                                    <input type="text" class="form-control" id="merkEdit" > 
+                                    <label for="ruangEdit">Nama Kategori</label>
+                                    <input type="text" class="form-control" id="ruangEdit" > 
                                   </div>
-                                <button type="button" class="btn btn-block btn-warning" id="editButton">Edit Merk</button>
+                                  <div>
+                                    <label for="unitEdit">Unit</label>
+                                    
+                                   </div>
+                                <button type="button" class="btn btn-block btn-warning" id="editButton">Edit Ruang</button>
                               </form>
                             </div>
                           </div>
@@ -193,27 +203,40 @@
     <script>
         document.addEventListener('DOMContentLoaded', (event)=>{
         const btnTambah = document.getElementById("btnTambah");
-        let namaEdit = document.getElementById("merkEdit");
+        let namaEdit = document.getElementById("ruangEdit");
         const btnEdit = document.getElementById("editButton")
         const hapusBtn = document.getElementById("hapusBtn")
-        let idMerk = '';
+        let id;
+        let idUnit;
 
         document.querySelectorAll('.btnEdit').forEach(btn =>{
             btn.addEventListener('click', (e)=>{
                 const nama = e.target.getAttribute('data-nama')
-                idMerk = e.target.getAttribute('data-id')
+                id = e.target.getAttribute('data-id')
+                idUnit = e.target.getAttribute('data-unit')
+                document.querySelector(`#unitEdit [data-id="${idUnit}"]`).selected = true;
                 namaEdit.value = nama
             })
         })
+
+        document.querySelector('#unit').addEventListener('change', function() {
+             const selectedOption = document.querySelectorAll('#unit option');
+             selectedOption.forEach((data)=>{
+                if(data.selected){
+                    idUnit = data.getAttribute('data-id')
+                    console.log(idMerk)
+                }
+             })
+        });
         
         document.querySelectorAll('.btnHapus').forEach(btn =>{
             btn.addEventListener('click', (e)=>{
-                idMerk = e.target.getAttribute('data-id')
+                id = e.target.getAttribute('data-id')
             })
         })
         
         btnEdit.addEventListener('click', async()=>{
-            const url = 'http://localhost:3333/updateMerk'
+            const url = 'http://localhost:3333/updateRuang'
             try {
                 const response = await fetch(url, {
                     method: 'PUT',
@@ -222,27 +245,28 @@
                     },
                     body: JSON.stringify({
                         "nama" : namaEdit.value,
-                        "id" : idMerk
+                        "idUnit" : idUnit,
+                        "id" : id
                     })
                 })
                 if(response.ok){
-                    alert(`Berhasil Edit data '${idMerk}', '${namaEdit}'`)
-                    window.location.href = '/merk'
+                    alert(`Berhasil Edit data `)
+                    window.location.href = '/ruang'
                     
                 }else{
-                    alert(" Edit data")
-                    window.location.href = '/merk'
+                    alert(" Gagal data")
+                    window.location.href = '/ruang'
                 }
             } catch (e) {
                 alert(e)
-                window.location.href = '/merk'
+                window.location.href = '/ruang'
             }
         })
 
         btnTambah.addEventListener('click', async () => {
-            const namaMerk = document.getElementById("namaMerk").value;
-            const url = 'http://localhost:3333/addMerk';
-            if(namaMerk.value = ""){
+            const namaRuang = document.getElementById("namaRuang").value;
+            const url = 'http://localhost:3333/addRuang';
+            if(namaRuang.value = ""){
                 alert("Form Tidak boleh Kosong")
             }else{
                 try {
@@ -252,13 +276,14 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        "nama": namaMerk
+                        "nama": namaRuang,
+                        "idUnit": idUnit
                     })
                 });
                 
                 if (response.ok) {
                     alert('Data berhasil ditambahkan');
-                    window.location.href = '/merk'
+                    window.location.href = '/ruang'
                 } else {
                     alert('Terjadi kesalahan. Silakan coba lagi.');
                 }
@@ -269,7 +294,7 @@
         });
         
         hapusBtn.addEventListener('click', async ()=>{
-            const url = `http://localhost:3333/deleteMerk`
+            const url = `http://localhost:3333/deleteRuang`
             try {
                 const respone = await fetch(url, {
                     method: 'DELETE',
@@ -277,19 +302,19 @@
                         'Content-Type': 'application/json'                    
                     },
                     body: JSON.stringify({
-                        "id" : idMerk
+                        "id" : id
                     })
                 })
                 if (response.ok) {
                     alert('Berhasil Hapus data'); 
-                    window.location.href = '/merk'; 
+                    window.location.href = '/ruang'; 
                 } else { 
                     alert('Terjadi kesalahan. Silakan coba lagi.'); 
-                    window.location.href = '/merk'; 
+                    window.location.href = '/ruang'; 
                 }
             } catch (e) {
                 alert(e);
-                window.location.href = '/merk'
+                window.location.href = '/ruang'
             }
         })
     })
